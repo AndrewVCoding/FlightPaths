@@ -9,7 +9,7 @@ public class FlightData
 
 	public void createGraph(String[] paths)
 	{
-		boolean debug = false;
+		boolean debug = true;
 
 		//Iterate through the array of paths, adding each city and its destinations
 		for(String line : paths)
@@ -20,6 +20,9 @@ public class FlightData
 			City start = getCity(pathData[0]);
 			City desti = getCity(pathData[1]);
 
+			if(debug)
+				System.out.println("Adding destination: " + desti.NAME + " " + pathData[2] + " " + pathData[3]);
+
 			start.addDestination(desti, pathData[2], pathData[3]);
 		}
 	}
@@ -28,7 +31,7 @@ public class FlightData
 	{
 		boolean debug = false;
 
-		Double output = -1.0;
+		double output = 0;
 
 		for(City start : CITIES)
 			if(start.NAME.equals(source))
@@ -38,8 +41,7 @@ public class FlightData
 				{
 					if(dest.NAME.equals(destination))
 						output = start.COSTS.get(index);
-					else
-						index++;
+					index++;
 				}
 			}
 
@@ -50,7 +52,7 @@ public class FlightData
 	{
 		boolean debug = false;
 
-		int output = -1;
+		int output = 0;
 
 		for(City start : CITIES)
 			if(start.NAME.equals(source))
@@ -60,17 +62,17 @@ public class FlightData
 				{
 					if(dest.NAME.equals(destination))
 						output = start.TIMES.get(index);
-					else
-						index++;
+					index++;
 				}
 			}
 
 		return output;
 	}
 
-	public void printFlightPaths(String startIn, String destinationIn)
+	public List<String> printFlightPaths(String startIn, String destinationIn)
 	{
 		boolean debug = false;
+		List<String> output = new ArrayList<>();
 
 		if(debug)
 			System.out.println("Getting flight plan");
@@ -80,7 +82,7 @@ public class FlightData
 		path.add(getCity(startIn));
 		City dest = getCity(destinationIn);
 
-		String plan = "     ";
+		String plan;
 
 		COST = 0;
 		TIME = 0;
@@ -92,8 +94,11 @@ public class FlightData
 		int pathNum = 0;
 		for(List<City> flightPlan : paths)
 		{
+			COST = getPathCost(flightPlan);
+			TIME = getPathTime(flightPlan);
+
 			pathNum++;
-			plan += "Path " + pathNum  + ": " + flightPlan.get(0).NAME;
+			plan = "     Path " + pathNum + ": " + flightPlan.get(0).NAME;
 			int index = 1;
 			while(index < flightPlan.size())
 			{
@@ -102,15 +107,14 @@ public class FlightData
 			}
 			String cost = String.format("%1$,.2f", COST);
 
-			plan += ". Time: " + TIME + " Cost: " + cost + "\n     ";
+			plan += ". Time: " + TIME + " Cost: " + cost + "\n";
+			output.add(plan);
 		}
 
 		if(pathNum == 0)
-			plan = "     No flight plans available";
+			output.add("     No flight plans available\n");
 
-		System.out.println(plan);
-
-
+		return output;
 	}
 
 	public void getPaths(List<City> path, City destination, List<List<City>> paths)
@@ -136,8 +140,8 @@ public class FlightData
 
 				List<City> newPath = new ArrayList<>(path);
 
-				COST += getCost(current.NAME, next.NAME);
-				TIME += getTime(current.NAME, next.NAME);
+				if(debug)
+					System.out.println("Adding cost: " + getCost(current.NAME, next.NAME));
 
 				newPath.add(next);
 
@@ -152,7 +156,7 @@ public class FlightData
 				else
 				{
 					if(debug)
-						System.out.println("next is is not destination");
+						System.out.println("next is not destination");
 					getPaths(newPath, destination, paths);
 				}
 			}
@@ -173,5 +177,27 @@ public class FlightData
 		CITIES.add(temp);
 
 		return temp;
+	}
+
+	public double getPathCost(List<City> path)
+	{
+		double output = 0;
+
+		int index = 0;
+		while(index < path.size())
+			output += getCost(path.get(index).NAME, path.get(index++).NAME);
+
+		return output;
+	}
+
+	public int getPathTime(List<City> path)
+	{
+		int output = 0;
+
+		int index = 0;
+		while(index < path.size())
+			output += getTime(path.get(index).NAME, path.get(index++).NAME);
+
+		return output;
 	}
 }
