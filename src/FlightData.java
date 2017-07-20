@@ -80,17 +80,20 @@ public class FlightData
 		path.add(getCity(startIn));
 		City dest = getCity(destinationIn);
 
+		String plan = "     ";
+
 		COST = 0;
 		TIME = 0;
 
-		//If weight is c, count the cost; if weight is t, count the time
+		//Get a list of paths from the source to the destination
 		getPaths(path, dest, paths);
 
 		//Display the flight plans
-		int pathNum = 1;
+		int pathNum = 0;
 		for(List<City> flightPlan : paths)
 		{
-			String plan = "Path " + pathNum  + ": " + flightPlan.get(0).NAME;
+			pathNum++;
+			plan += "Path " + pathNum  + ": " + flightPlan.get(0).NAME;
 			int index = 1;
 			while(index < flightPlan.size())
 			{
@@ -99,10 +102,14 @@ public class FlightData
 			}
 			String cost = String.format("%1$,.2f", COST);
 
-			plan += ". Time: " + TIME + " Cost: " + cost;
-			System.out.println(plan);
-			pathNum++;
+			plan += ". Time: " + TIME + " Cost: " + cost + "\n     ";
 		}
+
+		if(pathNum == 0)
+			plan = "     No flight plans available";
+
+		System.out.println(plan);
+
 
 	}
 
