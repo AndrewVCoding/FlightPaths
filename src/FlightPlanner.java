@@ -7,7 +7,8 @@ class FlightPlanner
 		FlightData flightData = new FlightData();
 		FileLoader fileLoader = new FileLoader();
 
-		// Load the data from both files.
+		// Load the data from both files. The files should be int the project folder, at the same level as the source
+		// folder.
 		flightData.createGraph(fileLoader.readFile("Flight Data.txt"));
 		List<String> flights = fileLoader.readFile("Requested Flight Plans.txt");
 
