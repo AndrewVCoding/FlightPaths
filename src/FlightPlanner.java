@@ -1,13 +1,13 @@
 import java.util.List;
 
-public class FlightPlanner
+class FlightPlanner
 {
 	public static void main(String[] args)
 	{
-		String[] paths = {"Dallas|Austin|1|1", "Dallas|Houston|1|1", "Dallas|Costa Rica|1|1",
-		                  "Austin|Dallas|1|1", "Austin|Costa Rica|1|1", "Costa Rica|Frankfurt|1|1",
-		                  "Austin|London|1|1", "Austin|Frankfurt|1|1", "Frankfurt|London|1|1",
-		                  "London|Houston|1|1", "Houston|Costa Rica|1|1", "Costa Rica|Austin|1|1"};
+		String[] paths = {"Dallas|Austin|60|120", "Dallas|Houston|70|150", "Dallas|Costa Rica|175|480",
+		                  "Austin|Dallas|65|130", "Austin|Costa Rica|180|410", "Costa Rica|Frankfurt|245|650",
+		                  "Austin|London|230|590", "Austin|Frankfurt|240|630", "Frankfurt|London|110|125",
+		                  "London|Houston|210|540", "Houston|Costa Rica|180|420", "Costa Rica|Austin|180|420"};
 
 		String[] flights = {"Middle|Fate|C", "Dallas|Frankfurt|C", "Frankfurt|Dallas|T", "Austin|London|T"};
 		FlightData flightData = new FlightData();

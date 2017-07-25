@@ -1,12 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class City
+class City
 {
-	public String NAME;
-	public List<City> DESTINATIONS = new ArrayList<>();
-	public List<Double> COSTS = new ArrayList<>();
-	public List<Integer> TIMES = new ArrayList<>();
+	public final String NAME;
+	public final List<City> DESTINATIONS = new ArrayList<>();
+	public final List<Double> COSTS = new ArrayList<>();
+	public final List<Integer> TIMES = new ArrayList<>();
 
 	public City(String name)
 	{

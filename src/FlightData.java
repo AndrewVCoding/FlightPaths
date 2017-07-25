@@ -1,15 +1,22 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class FlightData
+/**
+ * Allows for the creation of a graph and for finding paths between points on the graph.
+ */
+class FlightData
 {
-	List<City> CITIES = new ArrayList<>();
-	double COST = 0;
-	int TIME = 0;
+	private final List<City> CITIES = new ArrayList<>();
 
+	/**
+	 * Takes an array of strings "A|B|cost|time" and creates a list of all cities, each with a list of destinations
+	 * and their costs/times
+	 *
+	 * @param paths A list of Strings of the format: "A|B|cost|time"
+	 */
 	public void createGraph(String[] paths)
 	{
-		boolean debug = true;
+		boolean debug = false;
 
 		//Iterate through the array of paths, adding each city and its destinations
 		for(String line : paths)
@@ -27,7 +34,14 @@ public class FlightData
 		}
 	}
 
-	public Double getCost(String source, String destination)
+	/**
+	 * Returns the cost of going from the source to the destination City
+	 *
+	 * @param source The starting city
+	 * @param destination The ending city
+	 * @return The cost from the source to an adjacent destination
+	 */
+	private Double getCost(String source, String destination)
 	{
 		boolean debug = false;
 
@@ -48,7 +62,14 @@ public class FlightData
 		return output;
 	}
 
-	public int getTime(String source, String destination)
+	/**
+	 * Returns the time to go from the source to the destination City
+	 *
+	 * @param source The starting city
+	 * @param destination The ending city
+	 * @return The time from the source to an adjacent destination
+	 */
+	private int getTime(String source, String destination)
 	{
 		boolean debug = false;
 
@@ -69,6 +90,13 @@ public class FlightData
 		return output;
 	}
 
+	/**
+	 * Returns a list of all possible paths from startIn to destinationIn
+	 *
+	 * @param startIn The name of the starting city
+	 * @param destinationIn The name of the destination city
+	 * @return A list of strings that each represent a path from the starting to the ending city
+	 */
 	public List<String> printFlightPaths(String startIn, String destinationIn)
 	{
 		boolean debug = false;
@@ -84,13 +112,13 @@ public class FlightData
 
 		String plan;
 
-		COST = 0;
-		TIME = 0;
+		double COST = 0;
+		int TIME = 0;
 
 		//Get a list of paths from the source to the destination
 		getPaths(path, dest, paths);
 
-		//Display the flight plans
+		//Build a string displaying the flight path and add it to the list of paths
 		int pathNum = 0;
 		for(List<City> flightPlan : paths)
 		{
@@ -100,11 +128,13 @@ public class FlightData
 			pathNum++;
 			plan = "     Path " + pathNum + ": " + flightPlan.get(0).NAME;
 			int index = 1;
+			StringBuilder planBuilder = new StringBuilder(plan);
 			while(index < flightPlan.size())
 			{
-				plan += " -> " + flightPlan.get(index).NAME;
+				planBuilder.append(" -> ").append(flightPlan.get(index).NAME);
 				index++;
 			}
+			plan = planBuilder.toString();
 			String cost = String.format("%1$,.2f", COST);
 
 			plan += ". Time: " + TIME + " Cost: " + cost + "\n";
@@ -117,7 +147,13 @@ public class FlightData
 		return output;
 	}
 
-	public void getPaths(List<City> path, City destination, List<List<City>> paths)
+	/**
+	 * Returns a list of all paths between two cities.
+	 * @param path A list of cities already in the path, should start as just the source city in the list.
+	 * @param destination The destination city
+	 * @param paths A list of all paths, starts empty and each path is added when completed
+	 */
+	private void getPaths(List<City> path, City destination, List<List<City>> paths)
 	{
 		boolean debug = false;
 
@@ -165,7 +201,12 @@ public class FlightData
 		}
 	}
 
-	public City getCity(String name)
+	/**
+	 * Returns the object representing a city in the graph
+	 * @param name The name of the city
+	 * @return The City object in the graph with the same name as the input
+	 */
+	private City getCity(String name)
 	{
 		boolean debug = false;
 
@@ -179,24 +220,48 @@ public class FlightData
 		return temp;
 	}
 
-	public double getPathCost(List<City> path)
+	/**
+	 * Returns the total cost of a path
+	 * @param path A list of City objects in the path
+	 * @return The total cost of the path
+	 */
+	private double getPathCost(List<City> path)
 	{
+		boolean debug = false;
 		double output = 0;
 
 		int index = 0;
-		while(index < path.size())
-			output += getCost(path.get(index).NAME, path.get(index++).NAME);
+		while(index < path.size() - 1)
+		{
+			output += getCost(path.get(index).NAME, path.get(index + 1).NAME);
+
+			if(debug)
+				System.out.println(
+						"getPathCost: " + path.get(index).NAME + " -> " + path.get(index + 1).NAME + "\noutput += " +
+						getCost(path.get(index).NAME, path.get(index + 1).NAME) + " = " + output);
+
+			index++;
+		}
 
 		return output;
 	}
 
-	public int getPathTime(List<City> path)
+	/**
+	 * Returns the total time of a path
+	 * @param path A list of City objects in the path
+	 * @return The total time to traverse the given path
+	 */
+	private int getPathTime(List<City> path)
 	{
+		boolean debug = false;
 		int output = 0;
 
 		int index = 0;
-		while(index < path.size())
-			output += getTime(path.get(index).NAME, path.get(index++).NAME);
+		while(index < path.size() - 1)
+		{
+			output += getTime(path.get(index).NAME, path.get(index + 1).NAME);
+			index++;
+		}
 
 		return output;
 	}
