@@ -14,7 +14,7 @@ class FlightData
 	 *
 	 * @param paths A list of Strings of the format: "A|B|cost|time"
 	 */
-	public void createGraph(String[] paths)
+	public void createGraph(List<String> paths)
 	{
 		boolean debug = false;
 
@@ -113,8 +113,8 @@ class FlightData
 
 		String plan;
 
-		double COST = 0;
-		int TIME = 0;
+		double COST;
+		int TIME;
 
 		//Get a list of paths from the source to the destination
 		getPaths(path, dest, paths);

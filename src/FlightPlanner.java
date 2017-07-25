@@ -4,23 +4,12 @@ class FlightPlanner
 {
 	public static void main(String[] args)
 	{
-		String[] paths = {"Dallas|Austin|60|120",
-		                  "Dallas|Houston|70|150",
-		                  "Dallas|Costa Rica|175|480",
-		                  "Austin|Dallas|65|130",
-		                  "Austin|Costa Rica|180|410",
-		                  "Costa Rica|Frankfurt|245|650",
-		                  "Austin|London|230|590",
-		                  "Austin|Frankfurt|240|630",
-		                  "Frankfurt|London|110|125",
-		                  "London|Houston|210|540",
-		                  "Houston|Costa Rica|180|420",
-		                  "Costa Rica|Austin|180|420"};
-
-		String[] flights = {"Dallas|Frankfurt|C", "Frankfurt|Dallas|T", "Austin|London|T"};
 		FlightData flightData = new FlightData();
+		FileLoader fileLoader = new FileLoader();
 
-		flightData.createGraph(paths);
+		// Load the data from both files.
+		flightData.createGraph(fileLoader.readFile("Flight Data.txt"));
+		List<String> flights = fileLoader.readFile("Requested Flight Plans.txt");
 
 		int flightNum = 1;
 
